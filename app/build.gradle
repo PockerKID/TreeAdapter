@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+
+//名称
+def getAppName() {
+    return "TreeAdapter"
+}
+
+//时间
+def buildTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getDefault())
+}
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+    defaultConfig {
+        applicationId 'com.z.treeadapter'
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        //(x/xx/xx/xxx-->x.xx.xx.xxx)eg.-->1.23.45.078/1.23.45RC07-8
+        versionCode 10000001
+        versionName "1.0.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility java_version
+        targetCompatibility java_version
+    }
+    //自动重命名APK
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name.equals('release')) {
+                outputFileName = "${getAppName()}-V${defaultConfig.versionName}-${buildTime()}.apk"
+            } else if (variant.buildType.name.equals('debug')) {
+                outputFileName = "${getAppName()}-V${defaultConfig.versionName}.apk"
+            }
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs', project(':db').file('libs')
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //Android Support
+    //region
+    implementation "com.android.support:appcompat-v7:${appcompat_version}"
+    implementation "com.android.support:cardview-v7:${appcompat_version}"
+    implementation "com.android.support:design:${appcompat_version}"
+    implementation "com.android.support:support-v4:${appcompat_version}"
+    implementation "com.android.support.constraint:constraint-layout:${constraint_version}"
+    implementation "android.arch.navigation:navigation-fragment:${navigation_version}"
+    implementation "android.arch.navigation:navigation-ui:${navigation_version}"
+    //endregion
+    //Test
+    //region
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //endregion
+    implementation "com.android.support:multidex:${default_module_version}"
+
+    implementation project(path: ':db')
+
+    //Permission
+    //region
+    implementation "pub.devrel:easypermissions:${permission_version}"
+    //endregion
+    //Ali FastJson反序列化时对大小写不敏感
+    //https://github.com/alibaba/fastjson
+    implementation "com.alibaba:fastjson:${fast_json_version}"
+    //Google Gson反序列化时对大小写敏感,要严格一致
+    implementation "com.google.code.gson:gson:${gson_version}"
+    //TinyPinyin https://github.com/promeG/TinyPinyin
+    implementation "com.github.promeg:tinypinyin:${tiny_pinyin}"
+}

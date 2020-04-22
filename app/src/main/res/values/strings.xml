@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">TreeAdapter</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="permission_request_explain">The application needs to obtain the following permissions to ensure normal operation, please allow:\r\n%1$s</string>
+    <string name="permission_request_common_explain">The application needs to obtain the following permissions to ensure normal operation, please allow.</string>
+    <string name="permission_granted">Get permission successfully!</string>
+    <string name="permission_denied">Failed to get %1$s permission!</string>
+    <string name="permissions_denied">Failed to get permission!</string>
+    <string name="permission_manually_request">Some features are not working properly, please go to the settings page to manually authorize.</string>
+    <string name="permission_authorization_str">Authorization</string>
+
+    <string name="msg_dialog_warning">Warning</string>
+    <string name="msg_dialog_cancel">Cancel</string>
+    <string name="msg_dialog_confirm">Confirm</string>
+    <string name="msg_dialog_hint">Hint</string>
+    <string name="msg_dialog_set">Set</string>
+
+    <string name="str_department">Department</string>
+    <string name="str_user">User</string>
+</resources>

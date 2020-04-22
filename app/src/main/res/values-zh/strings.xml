@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_request_explain">应用需要获取以下权限以保证正常运行,请允许: \r\n%1$s</string>
+    <string name="permission_request_common_explain">应用需要获取部分权限以保证正常运行,请允许.</string>
+    <string name="permission_granted">权限获取成功!</string>
+    <string name="permission_denied">权限%1$s获取失败!</string>
+    <string name="permissions_denied">权限获取失败!</string>
+    <string name="permission_manually_request">部分功能无法正常使用，请到设置页面手动授权。</string>
+    <string name="permission_authorization_str">授权</string>
+
+    <string name="msg_dialog_warning">警告</string>
+    <string name="msg_dialog_cancel">取消</string>
+    <string name="msg_dialog_confirm">确认</string>
+    <string name="msg_dialog_hint">提示</string>
+    <string name="msg_dialog_set">设置</string>
+
+    <string name="str_department">部门</string>
+    <string name="str_user">用户</string>
+</resources>

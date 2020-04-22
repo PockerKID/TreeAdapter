@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 10000
+        versionName "1.0.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //自动重命名AAR
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${project.name}-${defaultConfig.versionName}.aar"
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+//数据库版本以及Dao的相关设置
+greendao {
+    //数据库schema版本
+    schemaVersion 1
+    //设置DaoMaster DaoSession Dao包名，默认的是bean所在的包名
+    daoPackage 'com.z.db.greendao.dao'
+    //设置DaoMaster DaoSeeeion Dao目录，默认是build/generated/source/greendao
+    targetGenDir 'src/main/java'
+    //设置true,自动生成测试单元
+    //generateTests 'true'
+    //设置生成的单元测试目录，默认是src/androidTest/java
+    //targetGenDirTests 'src/androidTest/java'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:${appcompat_version}"
+
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    api "org.greenrobot:greendao:${green_dao_version}"
+}
