@@ -88,6 +88,7 @@ public class GreenDaoManager {
      */
     public synchronized void closeDataBase(DbUsage dbUsage) {
         closeDaoSession(dbUsage);
+        closeDaoMaster(dbUsage);
     }
 
     /**
@@ -95,6 +96,7 @@ public class GreenDaoManager {
      */
     public synchronized void closeDataBase() {
         closeDaoSession();
+        closeDaoMaster();
     }
 
     /**
@@ -111,6 +113,22 @@ public class GreenDaoManager {
      */
     private void closeDaoSession() {
         DaoManager.closeDaoSession();
+    }
+
+    /**
+     * 关闭数据库
+     *
+     * @param dbUsage 数据库用途类型{@link DbUsage}
+     */
+    private void closeDaoMaster(DbUsage dbUsage) {
+        DaoManager.closeDaoMaster(dbUsage);
+    }
+
+    /**
+     * 关闭连接
+     */
+    private void closeDaoMaster() {
+        DaoManager.closeDaoMaster();
     }
 }
 

@@ -115,33 +115,54 @@ public class DalFactory implements BaseDalFactory {
         }
         greenDaoManager = null;
         instance.remove(dbUsage);
+
+        errorLogDal = null;
+        departmentDal = null;
+        userDal = null;
     }
 
+    //Dal
+    //region
+
+    private ErrorLogDal errorLogDal;
+    private DepartmentDal departmentDal;
+    private UserDal userDal;
 
     /**
      * @return 错误日志信息表操作对象
      */
     public ErrorLogDal getErrorLogDal() {
-        return new ErrorLogDal(new GreenDaoInterfaceImpl<ErrorLog>().getInstance(
-                context, dbPath, dbName, dbUsage
-        ), ErrorLog.class);
+        if (errorLogDal == null) {
+            errorLogDal = new ErrorLogDal(new GreenDaoInterfaceImpl<ErrorLog>().getInstance(
+                    context, dbPath, dbName, dbUsage
+            ), ErrorLog.class);
+        }
+        return errorLogDal;
     }
 
     /**
      * @return 部门信息表操作对象
      */
     public DepartmentDal getDepartmentDal() {
-        return new DepartmentDal(new GreenDaoInterfaceImpl<Department>().getInstance(
-                context, dbPath, dbName, dbUsage
-        ), Department.class);
+        if (departmentDal == null) {
+            departmentDal = new DepartmentDal(new GreenDaoInterfaceImpl<Department>().getInstance(
+                    context, dbPath, dbName, dbUsage
+            ), Department.class);
+        }
+        return departmentDal;
     }
 
     /**
      * @return 用户信息表操作对象
      */
     public UserDal getUserDal() {
-        return new UserDal(new GreenDaoInterfaceImpl<User>().getInstance(
-                context, dbPath, dbName, dbUsage
-        ), User.class);
+        if (userDal == null) {
+            userDal = new UserDal(new GreenDaoInterfaceImpl<User>().getInstance(
+                    context, dbPath, dbName, dbUsage
+            ), User.class);
+        }
+        return userDal;
     }
+
+    //endregion
 }

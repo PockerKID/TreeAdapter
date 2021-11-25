@@ -1,11 +1,9 @@
 package com.z.treeadapter;
 
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
-import com.z.db.greendao.entities.Department;
 import com.z.treeadapter.application.AppHelper;
 import com.z.treeadapter.application.BaseActivity;
 import com.z.treeadapter.mode.DepartmentNode;

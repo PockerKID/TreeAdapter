@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
 
 //名称
 def getAppName() {
@@ -23,7 +26,13 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 
     buildTypes {
@@ -47,44 +56,36 @@ android {
         }
     }
 }
-
-repositories {
-    flatDir {
-        dirs 'libs', project(':db').file('libs')
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //Android Support
     //region
-    implementation "com.android.support:appcompat-v7:${appcompat_version}"
-    implementation "com.android.support:cardview-v7:${appcompat_version}"
-    implementation "com.android.support:design:${appcompat_version}"
-    implementation "com.android.support:support-v4:${appcompat_version}"
-    implementation "com.android.support.constraint:constraint-layout:${constraint_version}"
-    implementation "android.arch.navigation:navigation-fragment:${navigation_version}"
-    implementation "android.arch.navigation:navigation-ui:${navigation_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
+    implementation "androidx.core:core-ktx:$ktx_core_version"
+
     //endregion
     //Test
     //region
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$test_espresso_version"
     //endregion
-    implementation "com.android.support:multidex:${default_module_version}"
+    implementation "androidx.multidex:multidex:$multidex_version"
 
     implementation project(path: ':db')
 
     //Permission
     //region
-    implementation "pub.devrel:easypermissions:${permission_version}"
+    implementation "pub.devrel:easypermissions:$permission_version"
     //endregion
     //Ali FastJson反序列化时对大小写不敏感
     //https://github.com/alibaba/fastjson
-    implementation "com.alibaba:fastjson:${fast_json_version}"
+    implementation "com.alibaba:fastjson:$fast_json_version"
     //Google Gson反序列化时对大小写敏感,要严格一致
-    implementation "com.google.code.gson:gson:${gson_version}"
+    implementation "com.google.code.gson:gson:$gson_version"
     //TinyPinyin https://github.com/promeG/TinyPinyin
-    implementation "com.github.promeg:tinypinyin:${tiny_pinyin}"
+    implementation "com.github.promeg:tinypinyin:$tiny_pinyin"
 }

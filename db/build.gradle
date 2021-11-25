@@ -8,8 +8,11 @@ android {
     defaultConfig {
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
-        versionCode 10000
-        versionName "1.0.0"
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
     buildTypes {
         release {
@@ -22,12 +25,6 @@ android {
         variant.outputs.all {
             outputFileName = "${project.name}-${defaultConfig.versionName}.aar"
         }
-    }
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'
     }
 }
 
@@ -47,11 +44,11 @@ greendao {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:${appcompat_version}"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
 
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$test_espresso_version"
 
-    api "org.greenrobot:greendao:${green_dao_version}"
+    api "org.greenrobot:greendao:$green_dao_version"
 }

@@ -3,6 +3,7 @@ package com.z.db.greendao.manager;
 import android.content.Context;
 
 import com.z.db.greendao.GreenDaoContext;
+import com.z.db.greendao.dao.DaoMaster;
 import com.z.db.greendao.dao.DaoSession;
 
 import java.util.HashMap;
@@ -23,7 +24,48 @@ public class DaoManager {
     /**
      * DaoSessionMap
      */
-    private static Map<String, DaoSession> sessionMap = new HashMap<>();
+    private final static Map<String, DaoMaster> DAO_MASTER_MAP = new HashMap<>();
+
+    /**
+     * DaoSessionMap
+     */
+    private final static Map<String, DaoSession> DAO_SESSION_MAP = new HashMap<>();
+
+    /**
+     * 添加数据库
+     *
+     * @param key       Key
+     * @param daoMaster {@link DaoMaster}
+     */
+    private static void addDaoMaster(String key, DaoMaster daoMaster) {
+        try {
+            DAO_MASTER_MAP.put(key, daoMaster);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 移除据库
+     *
+     * @param dbUsage 数据库用途类型{@link DbUsage}
+     */
+    private static void removeDaoMaster(DbUsage dbUsage) {
+        try {
+            final DaoMaster daoMaster = DAO_MASTER_MAP.get(dbUsage.name());
+            if (daoMaster != null) {
+                daoMaster.getDatabase().close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                DAO_MASTER_MAP.remove(dbUsage.name());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 添加数据库连接
@@ -33,7 +75,7 @@ public class DaoManager {
      */
     private static void addDaoSession(String key, DaoSession daoSession) {
         try {
-            sessionMap.put(key, daoSession);
+            DAO_SESSION_MAP.put(key, daoSession);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +88,7 @@ public class DaoManager {
      */
     private static void removeDaoSession(DbUsage dbUsage) {
         try {
-            sessionMap.remove(dbUsage.name());
+            DAO_SESSION_MAP.remove(dbUsage.name());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,11 +109,13 @@ public class DaoManager {
             case Personal:
                 final PersonalDbDaoMaster.DevOpenHelper personalDevOpenHelper = new PersonalDbDaoMaster.DevOpenHelper(greenDaoContext, dbName, null);
                 PersonalDbDaoMaster personalDbDaoMaster = new PersonalDbDaoMaster(personalDevOpenHelper.getWritableDb());
+                addDaoMaster(dbUsage.name(), personalDbDaoMaster);
                 addDaoSession(dbUsage.name(), personalDbDaoMaster.newSession());
                 break;
             case Log:
                 final LogDbDaoMaster.DevOpenHelper logDevOpenHelper = new LogDbDaoMaster.DevOpenHelper(greenDaoContext, dbName, null);
                 LogDbDaoMaster logDbDaoMaster = new LogDbDaoMaster(logDevOpenHelper.getWritableDb());
+                addDaoMaster(dbUsage.name(), logDbDaoMaster);
                 addDaoSession(dbUsage.name(), logDbDaoMaster.newSession());
                 break;
             default:
@@ -87,7 +131,7 @@ public class DaoManager {
      */
     public static DaoSession getDaoSession(DbUsage dbUsage) {
         try {
-            return sessionMap.get(dbUsage.name());
+            return DAO_SESSION_MAP.get(dbUsage.name());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,7 +157,7 @@ public class DaoManager {
      * @return 据库连接
      */
     public static Map<String, DaoSession> getDaoSessions() {
-        return sessionMap;
+        return DAO_SESSION_MAP;
     }
 
     /**
@@ -122,6 +166,25 @@ public class DaoManager {
     public static void closeDaoSession() {
         for (DbUsage dbUsage : DbUsage.values()) {
             closeDaoSession(dbUsage);
+        }
+    }
+
+
+    /**
+     * 关闭数据库
+     *
+     * @param dbUsage 数据库用途类型{@link DbUsage}
+     */
+    public static void closeDaoMaster(DbUsage dbUsage) {
+        removeDaoMaster(dbUsage);
+    }
+
+    /**
+     * 关闭数据库连接
+     */
+    public static void closeDaoMaster() {
+        for (DbUsage dbUsage : DbUsage.values()) {
+            closeDaoMaster(dbUsage);
         }
     }
 }

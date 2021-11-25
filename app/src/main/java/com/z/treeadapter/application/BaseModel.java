@@ -1,6 +1,6 @@
 package com.z.treeadapter.application;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.z.treeadapter.utils.JsonHelper;
 
