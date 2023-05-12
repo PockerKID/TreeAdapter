@@ -6,8 +6,8 @@ import android.view.View;
 
 import com.z.treeadapter.application.AppHelper;
 import com.z.treeadapter.application.BaseActivity;
-import com.z.treeadapter.mode.DepartmentNode;
-import com.z.treeadapter.mode.UserLeaf;
+import com.z.treeadapter.model.DepartmentNode;
+import com.z.treeadapter.model.UserLeaf;
 import com.z.treeadapter.tree.listener.ITreeNodeClickListener;
 import com.z.treeadapter.tree.model.TreeNode;
 import com.z.treeadapter.utils.ToastHelper;

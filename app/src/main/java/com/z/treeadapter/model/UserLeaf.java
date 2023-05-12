@@ -1,4 +1,4 @@
-package com.z.treeadapter.mode;
+package com.z.treeadapter.model;
 
 import com.z.db.greendao.entities.User;
 import com.z.treeadapter.tree.model.BaseLeaf;
