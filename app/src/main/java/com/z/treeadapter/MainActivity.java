@@ -1,7 +1,10 @@
 package com.z.treeadapter;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
 import android.view.View;
 
 import com.z.treeadapter.application.AppHelper;
@@ -47,13 +50,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             final int id = v.getId();
-            switch (id) {
-                case R.id.fab:
-                    selectMode = !selectMode;
-                    changeTreeStyle(selectMode);
-                    break;
-                default:
-                    break;
+            if (id == R.id.fab) {
+                selectMode = !selectMode;
+                changeTreeStyle(selectMode);
             }
         }
     };
@@ -74,13 +73,20 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onLeafSelect(int position, UserLeaf leaf) {
-            if(leaf.isSelected()) {
+            if (leaf.isSelected()) {
                 ToastHelper.getInstance().showShortToast("Selected-->" + leaf.getUser().getName());
-            }else {
+            } else {
                 ToastHelper.getInstance().showShortToast("Cancel select-->" + leaf.getUser().getName());
             }
         }
     };
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setCheckPermissionOnCreate(false);
+        super.onCreate(savedInstanceState);
+        onPermissionGranted();
+    }
 
     @Override
     protected void initView() {
@@ -89,7 +95,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void initParameters() {
+    protected void onPermissionGranted() {
         //已获取存储权限
         AppHelper.getInstance().init(activity);
 

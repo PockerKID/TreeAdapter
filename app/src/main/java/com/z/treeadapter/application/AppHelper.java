@@ -109,7 +109,12 @@ public class AppHelper {
      * 初始化工作空间
      */
     private void initWorkSpace() {
-        final File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "TreeAdapter");
+        File dir;
+        try {
+            dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "TreeAdapter");
+        } catch (Exception e) {
+            dir = new File(context.getCacheDir(), "TreeAdapter");
+        }
         if (!dir.exists()) {
             dir.mkdirs();
         }

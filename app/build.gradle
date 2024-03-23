@@ -1,7 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+}
 
 //名称
 def getAppName() {
@@ -14,25 +16,18 @@ def buildTime() {
 }
 
 android {
-    compileSdkVersion compile_sdk_version
-    buildToolsVersion build_tools_version
+    namespace 'com.z.treeadapter'
+    compileSdk compile_sdk_version
     defaultConfig {
         applicationId 'com.z.treeadapter'
-        minSdkVersion min_sdk_version
-        targetSdkVersion target_sdk_version
+        minSdk min_sdk_version
+        targetSdk target_sdk_version
         //(x/xx/xx/xxx-->x.xx.xx.xxx)eg.-->1.23.45.078/1.23.45RC07-8
-        versionCode 10000001
+        versionCode 10000002
         versionName "1.0.0"
-        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-    }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
     }
 
     buildTypes {
@@ -41,46 +36,79 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/MANIFEST.MF'
+
+        pickFirst '**/*.so'
+    }
     compileOptions {
         sourceCompatibility java_version
         targetCompatibility java_version
     }
+    kotlinOptions {
+        jvmTarget = jvm_target
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
     //自动重命名APK
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            if (variant.buildType.name.equals('release')) {
-                outputFileName = "${getAppName()}-V${defaultConfig.versionName}-${buildTime()}.apk"
-            } else if (variant.buildType.name.equals('debug')) {
-                outputFileName = "${getAppName()}-V${defaultConfig.versionName}.apk"
+            if (variant.buildType.name == 'release') {
+                outputFileName = "${getAppName()}-V${defaultConfig.versionName}(${defaultConfig.versionCode})-${buildTime()}.apk"
+            } else if (variant.buildType.name == 'debug') {
+                outputFileName = "${getAppName()}-V${defaultConfig.versionName}(${defaultConfig.versionCode}).apk"
             }
         }
     }
 }
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //Android Support
-    //region
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //Android
+    //https://developer.android.com/kotlin/ktx
+    implementation "androidx.core:core-ktx:$core_version"
+    //https://developer.android.com/jetpack/androidx/releases/appcompat
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    //https://github.com/material-components/material-components-android/releases
     implementation "com.google.android.material:material:$material_version"
+    //https://developer.android.com/jetpack/androidx/releases/constraintlayout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
-    implementation "androidx.core:core-ktx:$ktx_core_version"
+    //https://developer.android.com/jetpack/androidx/releases/startup
+    implementation "androidx.startup:startup-runtime:$startup_version"
 
-    //endregion
+    //https://developer.android.com/jetpack/androidx/releases/recyclerview
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
+    //https://developer.android.com/jetpack/androidx/releases/lifecycle
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
+    //https://github.com/Kotlin/kotlinx.coroutines
+    //https://developer.android.com/kotlin/coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
+
     //Test
-    //region
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$test_espresso_version"
-    //endregion
-    implementation "androidx.multidex:multidex:$multidex_version"
 
-    implementation project(path: ':db')
+    //XXPermissions
+    //https://github.com/getActivity/XXPermissions
+    implementation "com.github.getActivity:XXPermissions:$xx_permissions_version"
 
-    //Permission
-    //region
-    implementation "pub.devrel:easypermissions:$permission_version"
-    //endregion
     //Ali FastJson反序列化时对大小写不敏感
     //https://github.com/alibaba/fastjson
     implementation "com.alibaba:fastjson:$fast_json_version"
@@ -88,4 +116,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
     //TinyPinyin https://github.com/promeG/TinyPinyin
     implementation "com.github.promeg:tinypinyin:$tiny_pinyin"
+
+
+    implementation project(path: ':db')
 }
